@@ -24,30 +24,25 @@ public class HellobootApplication {
     public static void main(String[] args) {
         // Spring Container 생성 Context 가 Container 임
         // 컨테이너 생성
-        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext();
+        // Srping 컨테이너를 생성할 때, 서블릿 컨테이너 및 프론트 컨트롤러가 초기화 되는 것이 좋은 패턴이다.
+        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext() {
+            @Override
+            protected void onRefresh() {
+                super.onRefresh();
+                TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+                WebServer webServer = serverFactory.getWebServer(servletContext -> {
+                    servletContext.addServlet("dispatcherServlet",
+                            new DispatcherServlet(this)
+                    ).addMapping("/*");
+                });
+                webServer.start();
+            }
+        };
         // 오브젝트 (빈) 등록
         // HelloController 에서는 어떻게 Simple을 생성자에 넣을 것인가 ? (그냥 알아서 빈 중에 구현된 대상이 있다면, 관례적으로 넣는다.)
         applicationContext.registerBean(HelloController.class);
         applicationContext.registerBean(SimpleHelloService.class);
-        // 오브젝트 생성 요청
+        // 컨테이너 초기화
         applicationContext.refresh();
-
-
-        // [Step 1] Servlet 컨테이너 생성
-        // Factory 생성과 설정 작업등을 대신 해주는 대상
-        TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
-        WebServer webServer = serverFactory.getWebServer(servletContext -> {
-            servletContext.addServlet("dispatcherServlet",
-                    new DispatcherServlet(applicationContext)
-            ).addMapping("/*");
-        });
-        webServer.start();
-
-        // [Step 2] 서블릿 생성
-
-
-
-
-
     }
 }
