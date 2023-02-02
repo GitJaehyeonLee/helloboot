@@ -1,5 +1,6 @@
 package com.example.helloboot;
 
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,12 @@ import java.util.Objects;
 @RestController
 public class HelloController {
     private final HelloService helloService;
+    private final ApplicationContext applicationContext;
 
-    public HelloController(HelloService helloService) {
+    // LifeCycle 과 관련된 대상들은 스프링이 자체적으로 매개변수를 선택하여 입력해준다.
+    public HelloController(HelloService  helloService, ApplicationContext applicationContext) {
         this.helloService = helloService;
+        this.applicationContext = applicationContext;
     }
 
     // RestController 인 경우, Body 는 ResponseBody 로 고정

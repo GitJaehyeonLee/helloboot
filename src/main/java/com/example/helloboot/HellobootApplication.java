@@ -4,6 +4,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,15 +30,28 @@ import java.io.IOException;
 @Configuration
 @ComponentScan
 public class HellobootApplication {
+    @Bean
+    public ServletWebServerFactory serverWebServerFactory() {
+        return new TomcatServletWebServerFactory();
+    }
+
+    public DispatcherServlet dispatcherServlet() {
+        return new DispatcherServlet();
+    }
     public static void main(String[] args) {
         AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext() {
             @Override
             protected void onRefresh() {
                 super.onRefresh();
-                TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+                ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
+                DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
+
+                // Spring Container 정보 부여, 하지만 없어도, 알아서 찾는다...
+//                dispatcherServlet.setApplicationContext(this);
+
                 WebServer webServer = serverFactory.getWebServer(servletContext -> {
                     servletContext.addServlet("dispatcherServlet",
-                            new DispatcherServlet(this)
+                            dispatcherServlet
                     ).addMapping("/*");
                 });
                 webServer.start();
