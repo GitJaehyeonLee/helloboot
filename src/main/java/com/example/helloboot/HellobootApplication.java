@@ -23,6 +23,8 @@ public class HellobootApplication {
         // Factory 생성과 설정 작업등을 대신 해주는 대상
         TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
         WebServer webServer = serverFactory.getWebServer(servletContext -> {
+            HelloController helloController = new HelloController();
+
             servletContext.addServlet("frontcontroller", new HttpServlet() {
                 @Override
                 protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,9 +32,12 @@ public class HellobootApplication {
                     if (req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name())) {
                         String name = req.getParameter("name");
 
+                        // binding 데이터를 처리하는 오브젝트에 데이터를 넘기는 것
+                        String ret = helloController.hello(name);
+
                         resp.setStatus(HttpStatus.OK.value());
-                         resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
-                        resp.getWriter().println("Hello " + name );
+                        resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+                        resp.getWriter().println(ret);
                     }
                     else if (req.getRequestURI().equals("/user")) {
 
