@@ -21,18 +21,17 @@ import java.util.Objects;
 @RestController
 public class HelloController {
     private final HelloService helloService;
-    private final ApplicationContext applicationContext;
 
     // LifeCycle 과 관련된 대상들은 스프링이 자체적으로 매개변수를 선택하여 입력해준다.
-    public HelloController(HelloService  helloService, ApplicationContext applicationContext) {
+    public HelloController(HelloService  helloService) {
         this.helloService = helloService;
-        this.applicationContext = applicationContext;
     }
 
     // RestController 인 경우, Body 는 ResponseBody 로 고정
     // 아닌 경우, 템플릿을 뒤져서 출력하는 편임.
     @GetMapping("/hello")
     public String hello(String name) {
+        if (name == null || name.trim().length() == 0 ) throw new IllegalArgumentException();
         return helloService.sayHello(Objects.requireNonNull(name));
     }
 }
