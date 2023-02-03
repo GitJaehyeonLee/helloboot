@@ -1,6 +1,8 @@
 package com.example.helloboot;
 
-import org.apache.catalina.core.ApplicationContext;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,5 +35,4 @@ public class HelloController {
     public String hello(String name) {
         return helloService.sayHello(Objects.requireNonNull(name));
     }
-
 }

@@ -1,6 +1,7 @@
 package com.example.helloboot;
 
 import org.apache.catalina.startup.Tomcat;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -35,11 +36,12 @@ public class HellobootApplication {
         return new TomcatServletWebServerFactory();
     }
 
+    @Bean
     public DispatcherServlet dispatcherServlet() {
         return new DispatcherServlet();
     }
 
     public static void main(String[] args) {
-        MySpringApplication.run(HellobootApplication.class, args);
+        SpringApplication.run(HellobootApplication.class, args);
     }
 }
