@@ -9,22 +9,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.ANNOTATION_TYPE, ElementType.METHOD})
-@UnitTest
-@interface FastUnitTest {
-
-}
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.ANNOTATION_TYPE, ElementType.METHOD})
-@Test
-@interface UnitTest {
-
-}
 
 public class HelloServiceTest {
-    @FastUnitTest
+    @Test
     void simpleHelloService() {
         SimpleHelloService helloService = new SimpleHelloService();
 

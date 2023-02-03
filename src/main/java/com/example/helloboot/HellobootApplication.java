@@ -28,19 +28,8 @@ import java.io.IOException;
 // 컴포넌트를 표기하여, 현재 클래스 내에 빈이 있음을 인지
 // ComponentScan 을 표기하여, 하위 패키지 대상 전체를 컴포넌트로 표기함
 // 단점은 컴포넌트가 많아질떄 의존 관계를 쉽게 판단하기 어려움.
-@Configuration
-@ComponentScan
+@MySpringBootAnnotation
 public class HellobootApplication {
-    @Bean
-    public ServletWebServerFactory serverWebServerFactory() {
-        return new TomcatServletWebServerFactory();
-    }
-
-    @Bean
-    public DispatcherServlet dispatcherServlet() {
-        return new DispatcherServlet();
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(HellobootApplication.class, args);
     }
